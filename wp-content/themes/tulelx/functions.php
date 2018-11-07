@@ -1,29 +1,10 @@
 <?php
-
-if ( ! function_exists( 'tulelx_setup ') ):
-    function tulelx_setup(){
-        add_theme_support('title-tag');
-        add_theme_support( 'post-formats', array(
-            'aside',
-            'image',
-            'video',
-            'quote',
-            'link',
-            'gallery',
-            'status',
-            'audio',
-            'chat',
-        ) );
-    }
-endif;
-add_action('after_setup_theme','tulelx_setup');
-
 function tulelx_scripts(){
     wp_enqueue_style('tulelx-style',get_stylesheet_uri());
 }
 add_action('wp_enqueue_scripts','tulelx_scripts');
 
-
+// wordpress插入图片删除宽度高度
 function fanly_remove_images_attribute( $html ) {
 	$html = preg_replace( '/(width|height|class|alt)=".*"\s/', "", $html );
 	$html = preg_replace( '/  /', "", $html );
@@ -39,5 +20,8 @@ function git_upload_filter($file) {
     return $file;
 }
 add_filter('wp_handle_upload_prefilter', 'git_upload_filter');
+
+// 禁用wordpress前台的管理员工具条
+show_admin_bar(false);
 
 ?>
