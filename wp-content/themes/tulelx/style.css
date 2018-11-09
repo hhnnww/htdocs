@@ -178,13 +178,13 @@ table {
 }
 
 /* 自定义css开始 */
-<<<<<<< HEAD
 body {
     background: #fff;
-    font-family: Pingfang, microsoft yahei;
+    font-family: Lato,sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: #333;
+    outline:0;
 }
 
 .container {
@@ -204,40 +204,86 @@ body {
     flex-wrap: wrap;
 }
 
+img{
+    max-height: 100%;
+    max-width: 100%;
+}
+
+li{
+    list-style: none;
+}
+
 /* header */
 .header{
+    height: 60px;
+}
+
+.header .logo{
+    width: 250px;
+    padding-left: 10px;
+    background: #f5692c;
+}
+
+.header .logo img{
+    max-height: 35px;
+    margin-top: 12px;
+}
+
+.header .menu li{
+    
+}
+
+.header .menu a{
+    text-decoration: none;
+    color: #333;
+    line-height: 60px;
+    padding: 0 15px;
+    display: block;
+    height: 60px;
+}
+
+.header .menu a:hover{
     background: #f9f9f9;
-    height: 65px;
 }
 
-.header .menu{
-    line-height: 65px;
-    list-style: none;
-=======
-body{
-	background:#fff;
-	color:#333;
-	font-family:Lato,Microsoft Yahei,sans-serif;
-	font-size:16px;
-	font-weight: 400;
+.header .search{
 }
 
-.container{
-	max-width: 1400px;
-	margin: 0 auto;
+.header .search input{
+    height: 30px;
+    margin-top: 15px;
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    padding: 0 5px;
+    width: 200px;
 }
 
-.row{
-	display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	align-items: flex-start;
+/* taglist */
+.taglist{
+    height: 450px;
 }
 
-.row-s{
-	display: flex;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	align-items: flex-start;
->>>>>>> e98c007ccc748f30e0c4df71ca6f4e1b83f3f57d
+.taglist-l{
+    background: #fc6c2d;
+    width: 260px;
+    height: 450px;
+    padding: 10px;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.taglist-r{
+    background: #fff;
+    width: 260px;
+    height: 450px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* jumu */
+.jumu{
+    background: #f9f9f9;
+    height: 450px;
+    margin-top: -450px;
 }
