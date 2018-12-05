@@ -1,0 +1,491 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* css reset end */
+
+html {
+    background: #eee;
+}
+
+body {
+    background: #fff;
+    font-family: Microsoft yahei ui, microsoft yahei, sans-serif;
+    color: #555;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.row-s {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+img {
+    max-width: 90%;
+}
+
+.container {
+    padding: 0 10px;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 130%;
+    margin-bottom: 10px;
+}
+
+h1 span {
+    color: #e53333;
+}
+
+p {
+    margin-top: 10px;
+}
+
+b {
+    font-weight: bold;
+}
+
+a {
+    color: #e53333;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+/* css start*/
+
+.header {
+    height: 60px;
+    line-height: 60px;
+    padding: 0 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.logo img {
+    height: 40px;
+    margin-top: 10px;
+}
+
+.menu li {
+    padding: 0 25px;
+}
+
+.menu li.on {
+    background: #f9f9f9;
+    font-weight: bold;
+}
+
+.search input {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: #999;
+    background: url(img/ss.svg) no-repeat 95% center;
+    background-size: 18px;
+}
+
+.box {
+    background: #fff;
+    border-bottom: 5px solid #eee;
+}
+
+.box-1 {
+    background: url(http://wx4.sinaimg.cn/mw690/005S5CBngy1fu12p2ixdoj303i02q743.jpg) no-repeat left 35px;
+    background-size: 30px 23px;
+    padding: 30px 30px 40px 50px;
+}
+
+.meta {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #999;
+}
+
+.meta b {
+    margin: 0 3px;
+}
+
+
+.meta span {
+    margin-right: 7px;
+}
+
+.meta span:after {
+    content: '·';
+    margin-left: 7px;
+    color: #ccc;
+}
+
+.meta span:last-child:after {
+    content: '';
+}
+
+.meta svg {
+    margin-right: 5px;
+    height: 18px;
+}
+
+.wdz {
+    margin-top: 10px;
+    align-items: center;
+    font-size: 13px;
+}
+
+.wdz svg {
+    height: 18px;
+    margin-right: 5px;
+}
+
+.wdz b {
+    margin-right: 10px;
+}
+
+/* box-2 */
+
+.box-2 {
+    background: url(http://wx1.sinaimg.cn/mw690/005S5CBngy1fu12p2ic90j303i02qjr8.jpg) no-repeat left 25px;
+    background-size: 30px 23px;
+    padding: 20px 30px 20px 50px;
+}
+
+.box-2 .author {
+    align-items: center;
+}
+
+.box-2 .author img {
+    height: 30px;
+    border-radius: 9999px;
+    margin-right: 8px;
+    border: 1px solid #eee;
+    padding: 3px;
+}
+
+.box-2 .author b {
+    margin-right: 10px;
+}
+
+.box-2 .author span {
+    background: #ffdb26;
+    border: 1px solid #fff;
+    box-shadow: 0 0 5px #999;
+    font-size: 10px;
+    padding: 0px 8px;
+    border-radius: 999px;
+}
+
+.box-2 .entry-content {
+    margin-top: 20px;
+}
+
+.box-2 .entry-content img{
+	margin-top: 10px;
+}
+
+.box-2 .entry-content span {
+    color: #e53333;
+    margin: 0 3px;
+}
+
+.box-2 pre{
+	background: #f9f9f9;
+	padding: 20px;
+	margin-top: 10px;
+	display: block;
+	color: #ccc;
+}
+
+.box-2 .comment li {
+    list-style: none;
+    border-bottom: 1px solid #ccc;
+    padding: 20px;
+}
+
+.box-2 .comment li:last-child {
+    border-bottom: none;
+}
+
+.box-2 .comment {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.box-2 .comment .author {
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.box-2 .comment .author .row-s {
+    align-content: center;
+}
+
+.box-2 .comment .author span {
+    background: none;
+    box-shadow: none;
+    color: #ffbd26;
+    font-size: 100%;
+    padding: 0;
+}
+
+.box-2 .comment .author b {
+    margin-right: 5px;
+    margin-left: 10px;
+}
+
+.box-2 .comment .com-content span {
+    color: #e53333;
+    margin: 0 3px;
+}
+
+.footer {
+    font-size: 8px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.xuanfu a {
+    color: #fff;
+    text-decoration: none;
+    background: #f5692c;
+    position: fixed;
+    bottom: 0;
+    color: #fff;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 22px;
+    display: block;
+    width: 100%;
+}
+
+.tanchu {
+    padding: 10px 0;
+}
+
+.tanchu h4 {
+    background: #00d500;
+    color: #fff;
+    padding: 10px;
+    border-radius: 9999px;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.tanchu h4 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.tanchu svg {
+    margin-right: 10px;
+}
+
+.tanchu h5 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.footer{
+	color: #eee;
+	font-size: 12px;
+}
+
+.footer a{
+	color: #eee;
+	text-decoration: none;
+}
+
+@media(min-width:800px) {
+    body {
+        background: #eee;
+        width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        margin-bottom: 60px;
+    }
+    .xuanfu a {
+        width: 800px;
+    }
+}
+
+@media(max-width:799px) {
+    .header {
+        padding: 0 10px;
+    }
+    body {
+        margin-bottom: 60px;
+        font-size: 14px;
+    }
+    .menu {
+        display: none;
+    }
+    .xuanfu {
+        width: 100%;
+    }
+    .box-2 {
+        padding: 18px 10px 20px 10px;
+    }
+    .box-2 > .author {
+        padding-left: 30px;
+    }
+    .box-2 .comment li {
+        padding: 10px;
+    }
+    .box-2 .comment .author {
+        margin-bottom: 5px;
+    }
+    .box-2 .comment .author span {
+        border: none;
+    }
+    .box-2 .comment .author b {
+        margin-left: 0;
+    }
+    .box-1 {
+        padding: 15px 10px 15px 10px;
+        background-position: left 20px;
+    }
+    .box-1 h1 {
+        padding-left: 35px;
+    }
+}
