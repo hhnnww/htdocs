@@ -455,8 +455,12 @@ img {
     }
     body {
         margin-bottom: 60px;
-        font-size: 14px;
+        font-size: 16px;
+		line-height: 1.6;
     }
+	.entry-content p,.entry-content img{
+		margin-top: 20px;
+	}
     .menu {
         display: none;
     }

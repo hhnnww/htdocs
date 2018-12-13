@@ -1,0 +1,50 @@
+
+
+.image-container{
+	text-align: center;
+	padding-top: $space;
+	padding-bottom: $space;
+	@include card;
+}
+.image-header{
+	margin-bottom: $space*2;
+}
+.image-title{
+	margin: 0 0 $space*0.5;
+}
+.image-meta{
+	color: $gray;
+}
+.image-content{
+	img{
+		height: auto;
+	}
+}
+.image-navigation{
+	margin-top: $space*2;
+	margin-bottom: $space*2;
+	a{
+		padding: 7px 15px;
+		display: inline-block;
+		border-radius: 2px;
+		background-color: $brand;
+		opacity:1;
+		color: #fff;
+		&:hover{
+			opacity:0.8;
+		}
+	}
+}
+.image-caption, .image-description{
+	margin: 0 auto $space*2;
+	max-width: 600px;
+}
+
+
+
+
+@include media-max(desk) {
+	.image-title{
+		font-size: 18px;
+	}
+}
