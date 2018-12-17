@@ -27,17 +27,21 @@ msgstr "亮红色"
 msgid "Dark Red"
 msgstr "暗红色"
 
+#: functions.php:179
+msgid "Medium Brown"
+msgstr "棕色"
+
 #: functions.php:174
 msgid "Dark Brown"
 msgstr "暗棕色"
 
-#: functions.php:164
-msgid "Bright Blue"
-msgstr "亮蓝色"
-
 #: functions.php:169
 msgid "Light Blue"
 msgstr "浅蓝色"
+
+#: functions.php:164
+msgid "Bright Blue"
+msgstr "亮蓝色"
 
 #: functions.php:159
 msgid "Blue Gray"
@@ -51,17 +55,18 @@ msgstr "白色"
 msgid "Light Gray"
 msgstr "浅灰色"
 
-#: functions.php:139
-msgid "Dark Gray"
-msgstr "暗灰色"
-
 #: functions.php:144
 msgid "Medium Gray"
 msgstr "灰色"
 
-#: functions.php:179
-msgid "Medium Brown"
-msgstr "棕色"
+#: functions.php:139
+msgid "Dark Gray"
+msgstr "暗灰色"
+
+#. translators: %s: Name of current post
+#: template-parts/content.php:28 inc/template-tags.php:184
+msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
+msgstr "继续阅读<span class=\"screen-reader-text\">“%s”</span>"
 
 #. translators: %s: Name of current post
 #: template-parts/content.php:49 template-parts/content-page.php:37
@@ -69,11 +74,6 @@ msgstr "棕色"
 #: template-parts/content-single.php:45 image.php:84
 msgid "Edit<span class=\"screen-reader-text\"> \"%s\"</span>"
 msgstr "编辑<span class=\"screen-reader-text\">“%s”</span>"
-
-#. translators: %s: Name of current post
-#: template-parts/content.php:28 inc/template-tags.php:184
-msgid "Continue reading<span class=\"screen-reader-text\"> \"%s\"</span>"
-msgstr "继续阅读<span class=\"screen-reader-text\">“%s”</span>"
 
 #: inc/customizer.php:283
 msgid "Red"
@@ -100,13 +100,13 @@ msgctxt "label"
 msgid "Search for:"
 msgstr "搜索："
 
-#: footer.php:17
-msgid "Footer Primary Menu"
-msgstr "页脚主菜单"
-
 #: footer.php:28
 msgid "Footer Social Links Menu"
 msgstr "页脚社交链接菜单"
+
+#: footer.php:17
+msgid "Footer Primary Menu"
+msgstr "页脚主菜单"
 
 #: functions.php:231
 msgid "Add widgets here to appear in your sidebar."
@@ -144,13 +144,13 @@ msgstr "作者："
 msgid "Previous post:"
 msgstr "上篇文章："
 
-#: single.php:35
-msgid "Next post:"
-msgstr "下篇文章："
-
 #: single.php:37
 msgid "Previous"
 msgstr "上一"
+
+#: single.php:35
+msgid "Next post:"
+msgstr "下篇文章："
 
 #: single.php:34
 msgid "Next"
@@ -206,13 +206,13 @@ msgstr "灰"
 msgid "Dark"
 msgstr "暗色"
 
-#: inc/customizer.php:253
-msgid "Default"
-msgstr "默认"
-
 #: inc/customizer.php:172
 msgid "Main Text Color"
 msgstr "主文字颜色"
+
+#: inc/customizer.php:253
+msgid "Default"
+msgstr "默认"
 
 #: inc/customizer.php:184
 msgid "Secondary Text Color"
@@ -231,13 +231,13 @@ msgctxt "Parent post link"
 msgid "<span class=\"meta-nav\">Published in</span><span class=\"post-title\">%title</span>"
 msgstr "<span class=\"meta-nav\">发布于</span><span class=\"post-title\">%title</span>"
 
-#: inc/customizer.php:130
-msgid "Base Color Scheme"
-msgstr "基础配色方案"
-
 #: inc/back-compat.php:41 inc/back-compat.php:53 inc/back-compat.php:68
 msgid "Twenty Sixteen requires at least WordPress version 4.4. You are running version %s. Please upgrade and try again."
 msgstr "Twenty Sixteen要求WordPress 4.4版或以上，您在运行%s版。请升级并重试。"
+
+#: inc/customizer.php:130
+msgid "Base Color Scheme"
+msgstr "基础配色方案"
 
 #: image.php:73
 msgctxt "Used before full size attachment link."
@@ -273,6 +273,14 @@ msgstr "展开子菜单"
 msgid "collapse child menu"
 msgstr "折叠子菜单"
 
+#. translators: If there are characters in your language that are not supported
+#. by Inconsolata, translate this to 'off'. Do not translate into your own
+#. language.
+#: functions.php:286
+msgctxt "Inconsolata font: on or off"
+msgid "on"
+msgstr "off"
+
 #: functions.php:239
 msgid "Content Bottom 1"
 msgstr "底部内容1"
@@ -298,14 +306,6 @@ msgstr "off"
 #. language.
 #: functions.php:281
 msgctxt "Montserrat font: on or off"
-msgid "on"
-msgstr "off"
-
-#. translators: If there are characters in your language that are not supported
-#. by Inconsolata, translate this to 'off'. Do not translate into your own
-#. language.
-#: functions.php:286
-msgctxt "Inconsolata font: on or off"
 msgid "on"
 msgstr "off"
 
@@ -358,13 +358,13 @@ msgstr "这儿似乎什么都没有，试试搜索？"
 msgid "Oops! That page can&rsquo;t be found."
 msgstr "有点尴尬诶！该页无法显示。"
 
-#. Author of the theme
-msgid "the WordPress team"
-msgstr "WordPress团队"
-
 #. Theme URI of the theme
 msgid "https://wordpress.org/themes/twentysixteen/"
 msgstr "https://wordpress.org/themes/twentysixteen/"
+
+#. Author of the theme
+msgid "the WordPress team"
+msgstr "WordPress团队"
 
 #. Author URI of the theme
 #: footer.php:56
