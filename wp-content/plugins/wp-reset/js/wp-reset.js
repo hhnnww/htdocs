@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
   // delete themes
   $('.tools_page_wp-reset').on('click', '#delete-themes', 'click', function(e) {
     e.preventDefault();
-  
+
     run_tool(this, 'delete_themes');
 
     return false;
@@ -48,11 +48,31 @@ jQuery(document).ready(function($) {
   // delete plugins
   $('.tools_page_wp-reset').on('click', '#delete-plugins', 'click', function(e) {
     e.preventDefault();
-  
+
     run_tool(this, 'delete_plugins');
 
     return false;
   }); // delete plugins
+
+
+  // drop custom tables
+  $('.tools_page_wp-reset').on('click', '#drop-custom-tables', 'click', function(e) {
+    e.preventDefault();
+
+    run_tool(this, 'drop_custom_tables');
+
+    return false;
+  }); // drop custom tables
+
+
+  // truncate custom tables
+  $('.tools_page_wp-reset').on('click', '#truncate-custom-tables', 'click', function(e) {
+    e.preventDefault();
+
+    run_tool(this, 'truncate_custom_tables');
+
+    return false;
+  }); // truncate custom tables
 
 
   // compare snapshot
@@ -60,7 +80,7 @@ jQuery(document).ready(function($) {
     e.preventDefault();
     uid = $(this).data('ss-uid');
     button = $(this);
-  
+
     block_ui($(button).data('wait-msg'));
     $.get({
       url: ajaxurl,
@@ -84,7 +104,7 @@ jQuery(document).ready(function($) {
           focusConfirm: false,
           showCloseButton: true,
           customClass: 'compare-snapshots'
-        });        
+        });
       } else {
         swal({ type: 'error', title: wp_reset.documented_error + ' ' + data.data });
       }
@@ -100,7 +120,7 @@ jQuery(document).ready(function($) {
   $('#wpr-snapshots').on('click', '.restore-snapshot', 'click', function(e) {
     e.preventDefault();
     uid = $(this).data('ss-uid');
-  
+
     run_tool(this, 'restore_snapshot', uid);
 
     return false;
@@ -143,7 +163,7 @@ jQuery(document).ready(function($) {
   $('#wpr-snapshots').on('click', '.delete-snapshot', 'click', function(e) {
     e.preventDefault();
     uid = $(this).data('ss-uid');
-  
+
     run_tool(this, 'delete_snapshot', uid);
 
     return false;
@@ -154,7 +174,7 @@ jQuery(document).ready(function($) {
   $('.tools_page_wp-reset').on('click', '.create-new-snapshot', 'click', function(e) {
     e.preventDefault();
     button = $('#create-new-snapshot-primary');
-  
+
     swal({ title: $(button).data('title'),
       type: 'question',
       text: $(button).data('text'),
@@ -165,7 +185,7 @@ jQuery(document).ready(function($) {
       confirmButtonText: $(button).data('btn-confirm'),
       cancelButtonText: wp_reset.cancel_button,
       width: 600
-    }).then((result) => { 
+    }).then((result) => {
       if (typeof result.value != 'undefined') {
         block = block_ui($(button).data('msg-wait'));
         $.get({
@@ -306,7 +326,7 @@ jQuery(document).ready(function($) {
              type: 'error',
              confirmButtonText: wp_reset.ok_button,
       });
-      
+
       e.preventDefault();
       return false;
     } // wrong confirmation code
@@ -358,7 +378,7 @@ jQuery(document).ready(function($) {
     return false;
   }); // toggle-card
 
-  
+
   // init cards; collapse those that need collapsing
   cards = localStorage.getItem('wp-reset-cards');
   if (cards != null) {
@@ -370,7 +390,7 @@ jQuery(document).ready(function($) {
     }
   });
 
-  
+
   // dismiss notice / pointer
   $('.wpr-dismiss-notice').on('click', function(e) {
     notice_name = $(this).data('notice');

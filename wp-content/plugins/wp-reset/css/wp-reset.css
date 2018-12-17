@@ -18,6 +18,11 @@
   text-align: center;
 }
 
+.tools_page_wp-reset .button.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .tools_page_wp-reset.wp-core-ui .button,
 .tools_page_wp-reset.wp-core-ui .button-primary,
 .tools_page_wp-reset.wp-core-ui .button-secondary {
@@ -80,6 +85,10 @@
 
 .tools_page_wp-reset p {
   line-height: 1.7;
+}
+
+.tools_page_wp-reset .button-delete:hover {
+  color: #cc2f2f;
 }
 
 .tools_page_wp-reset .rotating {
@@ -245,8 +254,8 @@
 }
 
 
-@-moz-keyframes spin { 
-  100% { 
+@-moz-keyframes spin {
+  100% {
     -moz-transform: rotate(-360deg);
   }
 }

@@ -3,7 +3,7 @@
   Plugin Name: WP Reset
   Plugin URI: https://wpreset.com/
   Description: Reset the site to default installation values without modifying any files. Deletes all customizations and content.
-  Version: 1.40
+  Version: 1.45
   Author: WebFactory Ltd
   Author URI: https://www.webfactoryltd.com/
   Text Domain: wp-reset
@@ -49,7 +49,7 @@ class WP_Reset {
 
   /**
    * Creates a new WP_Reset object and implements singleton
-   * 
+   *
    * @return WP_Reset
    */
   static function getInstance() {
@@ -63,7 +63,7 @@ class WP_Reset {
 
   /**
    * Initialize properties, hook to filters and actions
-   * 
+   *
    * @return null
    */
   private function __construct() {
@@ -71,24 +71,25 @@ class WP_Reset {
     $this->plugin_dir = plugin_dir_path(__FILE__);
     $this->plugin_url = plugin_dir_url(__FILE__);
     $this->load_options();
-    
+
     add_action('admin_menu', array($this, 'admin_menu'));
     add_action('admin_init', array($this, 'do_all_actions'));
     add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
     add_action('wp_ajax_wp_reset_dismiss_notice', array($this, 'ajax_dismiss_notice'));
     add_action('wp_ajax_wp_reset_run_tool', array($this, 'ajax_run_tool'));
-    
+
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'plugin_action_links'));
     add_filter('plugin_row_meta', array($this, 'plugin_meta_links'), 10, 2);
     add_filter('admin_footer_text', array($this, 'admin_footer_text'));
+    add_filter('install_plugins_table_api_args_featured', array($this, 'featured_plugins_tab'));
 
     $this->core_tables = array_map(function($tbl) { global $wpdb; return $wpdb->prefix . $tbl; }, $this->core_tables);
   } // __construct
 
-  
+
   /**
    * Get plugin version from file header
-   * 
+   *
    * @return string
    */
   function get_plugin_version() {
@@ -96,12 +97,12 @@ class WP_Reset {
 
     return $plugin_data['version'];
   } // get_plugin_version
-  
+
 
   /**
    * Load and prepare the options array
    * If needed create a new DB entry
-   * 
+   *
    * @return array
    */
   private function load_options() {
@@ -127,7 +128,7 @@ class WP_Reset {
     if ($change) {
       update_option('wp-reset', $options, true);
     }
-    
+
     $this->options = $options;
     return $options;
   } // load_options
@@ -135,7 +136,7 @@ class WP_Reset {
 
   /**
    * Get meta part of plugin options
-   * 
+   *
    * @return array
    */
   function get_meta() {
@@ -145,14 +146,14 @@ class WP_Reset {
 
   /**
    * Get all dismissed notices, or check for one specific notice
-   * 
+   *
    * @param string  $notice_name  Optional. Check if specified notice is dismissed.
-   * 
+   *
    * @return bool|array
    */
   function get_dismissed_notices($notice_name = '') {
     $notices = $this->options['dismissed_notices'];
-    
+
     if (empty($notice_name)) {
       return $notices;
     } else {
@@ -167,11 +168,11 @@ class WP_Reset {
 
   /**
    * Get options part of plugin options
-   * 
+   *
    * todo: not completed
-   * 
+   *
    * @param string  $key  Optional.
-   * 
+   *
    * @return array
    */
   function get_options($key = '') {
@@ -181,12 +182,12 @@ class WP_Reset {
 
   /**
    * Update plugin options, currently entire array
-   * 
+   *
    * todo: this handles the entire options array although it should only do the options part - it's confusing
-   * 
+   *
    * @param string  $key   Data to save.
-   * @param string  $data  Option key. 
-   * 
+   * @param string  $data  Option key.
+   *
    * @return bool
    */
   function update_options($key, $data) {
@@ -196,10 +197,10 @@ class WP_Reset {
     return $tmp;
   } // set_options
 
-  
+
   /**
    * Add plugin menu entry under Tools menu
-   * 
+   *
    * @return null
    */
   function admin_menu() {
@@ -209,7 +210,7 @@ class WP_Reset {
 
   /**
    * Dismiss notice via AJAX call
-   * 
+   *
    * @return null
    */
   function ajax_dismiss_notice() {
@@ -226,9 +227,9 @@ class WP_Reset {
 
   /**
    * Dismiss notice by adding it to dismissed_notices options array
-   * 
+   *
    * @param string  $notice_name  Notice to dismiss.
-   * 
+   *
    * @return bool
    */
   function dismiss_notice($notice_name) {
@@ -245,7 +246,7 @@ class WP_Reset {
 
   /**
    * Returns all WP pointers
-   * 
+   *
    * @return array
    */
   function get_pointers() {
@@ -259,7 +260,7 @@ class WP_Reset {
 
   /**
    * Enqueue CSS and JS files
-   * 
+   *
    * @return null
    */
   function admin_enqueue_scripts($hook) {
@@ -287,7 +288,7 @@ class WP_Reset {
     if ('tools_page_wp-reset' != $hook) {
       return;
     }
-    
+
     $options = $this->get_options();
 
     $js_localize = array('undocumented_error' => __('An undocumented error has occured. Please refresh the page and try again.', 'wp-reset'),
@@ -330,11 +331,11 @@ class WP_Reset {
     wp_dequeue_style('wpmegmaps-jqueryui');
     wp_dequeue_style('wp-botwatch-css');
   } // admin_enqueue_scripts
-  
+
 
   /**
    * Check if WP-CLI is available and running
-   * 
+   *
    * @return bool
    */
   function is_cli_running() {
@@ -348,38 +349,38 @@ class WP_Reset {
 
   /**
    * Deletes all transients.
-   * 
+   *
    * @return int  Number of deleted transient DB entries
    */
   function do_delete_transients() {
     global $wpdb;
-    
+
     $count = $wpdb->query("DELETE FROM $wpdb->options WHERE option_name LIKE '\_transient\_%' OR option_name LIKE '\_site\_transient\_%'");
-    
+
     return $count;
   } // do_delete_transients
-  
+
 
   /**
    * Deletes all files in uploads folder.
-   * 
+   *
    * @return int  Number of deleted files and folders.
    */
   function do_delete_uploads() {
     $upload_dir = wp_get_upload_dir();
 
     $this->delete_folder($upload_dir['basedir'], $upload_dir['basedir']);
-    
+
     return $this->delete_count;
   } // do_delete_uploads
 
 
   /**
    * Recursively deletes a folder
-   * 
+   *
    * @param string $folder  Recursive param.
    * @param string $base_folder  Base folder.
-   * 
+   *
    * @return bool
    */
   private function delete_folder($folder, $base_folder) {
@@ -407,9 +408,9 @@ class WP_Reset {
   /**
    * Deactivate and delete all plugins
    *
-   * @param bool  $keep_wp_reset  Keep WP Reset active and installed 
+   * @param bool  $keep_wp_reset  Keep WP Reset active and installed
    * @param bool  $silent_deactivate  Skip individual plugin deactivation functions when deactivating
-   * 
+   *
    * @return int  Number of deleted plugins.
    */
   function do_delete_plugins($keep_wp_reset = true, $silent_deactivate = false) {
@@ -444,7 +445,7 @@ class WP_Reset {
    * Delete all themes
    *
    * @param bool  $keep_default_theme  Keep default theme
-   * 
+   *
    * @return int  Number of deleted themes.
    */
   function do_delete_themes($keep_default_theme = true) {
@@ -458,7 +459,7 @@ class WP_Reset {
     foreach ($all_themes as $theme_slug => $theme_details) {
       $res = delete_theme($theme_slug);
     }
-    
+
     if (false == $keep_default_theme) {
       update_option('template', '');
       update_option('stylesheet', '');
@@ -469,8 +470,42 @@ class WP_Reset {
 
 
   /**
+   * Truncate custom tables
+   *
+   * @return int  Number of truncated tables.
+   */
+  function do_truncate_custom_tables() {
+    global $wpdb;
+    $custom_tables = $this->get_custom_tables();
+
+    foreach ($custom_tables as $tbl) {
+      $wpdb->query('TRUNCATE TABLE ' . $tbl['name']);
+    } // foreach
+
+    return sizeof($custom_tables);
+  } // do_truncate_custom_tables
+
+
+  /**
+   * Drop custom tables
+   *
+   * @return int  Number of dropped tables.
+   */
+  function do_drop_custom_tables() {
+    global $wpdb;
+    $custom_tables = $this->get_custom_tables();
+
+    foreach ($custom_tables as $tbl) {
+      $wpdb->query('DROP TABLE IF EXISTS ' . $tbl['name']);
+    } // foreach
+
+    return sizeof($custom_tables);
+  } // do_drop_custom_tables
+
+
+  /**
    * Run one tool via AJAX call
-   * 
+   *
    * @return null
    */
   function ajax_run_tool() {
@@ -478,7 +513,7 @@ class WP_Reset {
 
     $tool = trim(@$_GET['tool']);
     $extra_data = trim(@$_GET['extra_data']);
-    
+
     if ($tool == 'delete_transients') {
       $cnt = $this->do_delete_transients();
       wp_send_json_success($cnt);
@@ -490,6 +525,12 @@ class WP_Reset {
       wp_send_json_success($cnt);
     } elseif ($tool == 'delete_uploads') {
       $cnt = $this->do_delete_uploads();
+      wp_send_json_success($cnt);
+    } elseif ($tool == 'drop_custom_tables') {
+      $cnt = $this->do_drop_custom_tables();
+      wp_send_json_success($cnt);
+    } elseif ($tool == 'truncate_custom_tables') {
+      $cnt = $this->do_truncate_custom_tables();
       wp_send_json_success($cnt);
     } elseif ($tool == 'delete_snapshot') {
       $res = $this->do_delete_snapshot($extra_data);
@@ -537,9 +578,9 @@ class WP_Reset {
    * Reinstall / reset the WP site
    * There are no failsafes in the function - it reinstalls when called
    * Redirects when done
-   * 
+   *
    * @param array  $params  Optional.
-   * 
+   *
    * @return null
    */
   function do_reinstall($params = array()) {
@@ -563,7 +604,7 @@ class WP_Reset {
     $siteurl = get_option('siteurl');
     $home = get_option('home');
     $snapshots = $this->get_snapshots();
-    
+
     $active_plugins = get_option('active_plugins');
     $active_theme = wp_get_theme();
 
@@ -624,7 +665,7 @@ class WP_Reset {
     if (!empty($params['reactivate_plugins'])) {
       foreach ($active_plugins as $plugin_file) {
         activate_plugin($plugin_file);
-      } 
+      }
     }
 
     if (!$this->is_cli_running()) {
@@ -637,12 +678,12 @@ class WP_Reset {
       exit;
     }
   } // do_reinstall
-  
+
 
   /**
    * Checks wp_reset post value and performs all actions
    * todo: handle messages for various actions
-   * 
+   *
    * @return null|bool
    */
   function do_all_actions() {
@@ -660,7 +701,7 @@ class WP_Reset {
       add_settings_error('wp-reset', 'bad-nonce', __('Something went wrong. Please refresh the page and try again.', 'wp-reset'), 'error');
       return false;
     }
-   
+
     // check confirmation code
     if (true === isset($_POST['wp_reset_confirm']) && 'reset' !== $_POST['wp_reset_confirm']) {
       add_settings_error('wp-reset', 'bad-confirm', __('<b>Invalid confirmation code.</b> Please type "reset" in the confirmation field.', 'wp-reset'), 'error');
@@ -680,49 +721,49 @@ class WP_Reset {
 
 
   /**
-   * Add "Reset WordPress" action link to plugins table, left part
-   * 
+   * Add "Open WP Reset Tools" action link to plugins table, left part
+   *
    * @param array  $links  Initial list of links.
-   * 
+   *
    * @return array
    */
   function plugin_action_links($links) {
-    $settings_link = '<a href="' . admin_url('tools.php?page=wp-reset') . '" title="' . __('Reset WordPress', 'wp-reset') . '">' . __('Reset WordPress', 'wp-reset') . '</a>';
+    $settings_link = '<a href="' . admin_url('tools.php?page=wp-reset') . '" title="' . __('Open WP Reset Tools', 'wp-reset') . '">' . __('Open WP Reset Tools', 'wp-reset') . '</a>';
 
     array_unshift($links, $settings_link);
 
     return $links;
   } // plugin_action_links
-  
-  
+
+
   /**
    * Add links to plugin's description in plugins table
-   * 
+   *
    * @param array  $links  Initial list of links.
    * @param string $file   Basename of current plugin.
-   * 
+   *
    * @return array
    */
   function plugin_meta_links($links, $file) {
     if ($file !== plugin_basename(__FILE__)) {
       return $links;
     }
-    
+
     $support_link = '<a target="_blank" href="https://wordpress.org/support/plugin/wp-reset" title="' . __('Get help', 'wp-reset') . '">' . __('Support', 'wp-reset') . '</a>';
     $home_link = '<a target="_blank" href="' . $this->generate_web_link('plugins-table-right') . '" title="' . __('Plugin Homepage', 'wp-reset') . '">' . __('Plugin Homepage', 'wp-reset') . '</a>';
     $rate_link = '<a target="_blank" href="https://wordpress.org/support/plugin/wp-reset/reviews/#new-post" title="' . __('Rate the plugin', 'wp-reset') . '">' . __('Rate the plugin ★★★★★', 'wp-reset') . '</a>';
-    
+
     $links[] = $support_link;
     $links[] = $home_link;
     $links[] = $rate_link;
-    
+
     return $links;
   } // plugin_meta_links
 
 
   /**
    * Test if we're on WPR's admin page
-   * 
+   *
    * @return bool
    */
   function is_plugin_page() {
@@ -738,9 +779,9 @@ class WP_Reset {
 
   /**
    * Add powered by text in admin footer
-   * 
+   *
    * @param string  $text  Default footer text.
-   * 
+   *
    * @return string
    */
   function admin_footer_text($text) {
@@ -756,7 +797,7 @@ class WP_Reset {
 
   /**
    * Loads plugin's translated strings
-   * 
+   *
    * @return null
    */
   function load_textdomain() {
@@ -766,7 +807,7 @@ class WP_Reset {
 
   /**
    * Inform the user that WordPress has been successfully reset
-   * 
+   *
    * @return null
    */
   function notice_successfull_reset() {
@@ -778,7 +819,7 @@ class WP_Reset {
 
   /**
    * Outputs complete plugin's admin page
-   * 
+   *
    * @return null
    */
   function plugin_page() {
@@ -804,7 +845,7 @@ class WP_Reset {
       echo '</div>';
       $notice_shown = true;
     }
-    
+
     if ((!empty($meta['reset_count']) || !empty($snapshots)) && false === $notice_shown && false == $this->get_dismissed_notices('rate')) {
       echo '<div class="card notice-wrapper">';
       echo '<h2>' . __('Please help us keep the plugin free &amp; up-to-date', 'wp-reset') . '</h2>';
@@ -813,7 +854,7 @@ class WP_Reset {
       echo '</div>';
       $notice_shown = true;
     }
-    
+
     // Tidy Repo ad
     // disabled for now
     if (false && false === $notice_shown && $meta['reset_count'] >= 2 && false == $this->get_dismissed_notices('tidy')) {
@@ -845,7 +886,7 @@ class WP_Reset {
     echo '<div style="display: none;" id="tab-tools">';
     $this->tab_tools();
     echo '</div>';
-    
+
     echo '<div style="display: none;" id="tab-snapshots">';
     $this->tab_snapshots();
     echo '</div>';
@@ -853,7 +894,7 @@ class WP_Reset {
     echo '<div style="display: none;" id="tab-support">';
     $this->tab_support();
     echo '</div>';
-    
+
     if (empty($notices['geoip_tab'])) {
       echo '<div style="display: none;" id="tab-geoip">';
       $this->tab_geoip();
@@ -865,11 +906,11 @@ class WP_Reset {
     echo '</form>';
     echo '</div>'; // wrap
   } // plugin_page
-  
+
 
   /**
    * Echoes content for reset tab
-   * 
+   *
    * @return null
    */
   private function tab_reset() {
@@ -920,7 +961,7 @@ class WP_Reset {
     echo '<div class="card">';
     echo '<h2>' . __('Reset', 'wp-reset') . '</h2>';
     echo '<p>' . __('Type <b>reset</b> in the confirmation field to confirm the reset and then click the "Reset WordPress" button. <b>There is NO UNDO. No backups are made by WP Reset.</b>', 'wp-reset') . '</p>';
-    
+
     wp_nonce_field('wp-reset');
     echo '<p><input id="wp_reset_confirm" type="text" name="wp_reset_confirm" placeholder="' . esc_attr__('Type in "reset"', 'wp-reset'). '" value="" autocomplete="off"> &nbsp;';
     echo '<input id="wp_reset_submit" type="button" class="button-primary" value="' . __('Reset WordPress', 'wp-reset') . '"></p>';
@@ -930,48 +971,74 @@ class WP_Reset {
 
   /**
    * Echoes content for tools tab
-   * 
+   *
    * @return null
    */
   private function tab_tools() {
-    $theme =  wp_get_theme();
+    global $wpdb;
 
     echo '<div class="card">';
-    echo '<h2>' . __('Transients', 'wp-reset') . '</h2>';
-    echo '<p>' . __('All transient related database entries will be deleted. Including expired and non-expired transients, and orphaned timeout entries. <b>There is NO UNDO. WP Reset will not make any backups.</b>', 'wp-reset') . '</p>';
-    echo '<p><a data-btn-confirm="Delete all transients" data-text-wait="Deleting transients. Please wait." data-text-confirm="All database entries related to transients will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n transient database entries have been deleted." class="button" href="#" id="delete-transients">Delete all transients</a></p>';
+    echo '<h2>' . __('Delete Transients', 'wp-reset') . '</h2>';
+    echo '<p>' . __('All transient related database entries will be deleted. Including expired and non-expired transients, and orphaned transient timeout entries.<br><b>There is NO UNDO. WP Reset does not make any backups.</b>', 'wp-reset') . '</p>';
+    echo '<p><a data-btn-confirm="Delete all transients" data-text-wait="Deleting transients. Please wait." data-text-confirm="All database entries related to transients will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n transient database entries have been deleted." class="button button-delete" href="#" id="delete-transients">Delete all transients</a></p>';
     echo '</div>';
 
     $upload_dir = wp_upload_dir(date('Y/m'), true);
+    $upload_dir['basedir'] = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $upload_dir['basedir']);
 
     echo '<div class="card">';
-    echo '<h2>' . __('Uploads Folder', 'wp-reset') . '</h2>';
-    echo '<p>' . __('All files in <code>' . $upload_dir['basedir'] . '</code> folder will be deleted. Including folders and subfolder, and files in subfolders.  Files associated with <a href="' . admin_url('upload.php') . '">media</a> entries will be deleted too. <b>There is NO UNDO. WP Reset will not make any backups.</b>', 'wp-reset') . '</p>';
+    echo '<h2>' . __('Clean Uploads Folder', 'wp-reset') . '</h2>';
+    echo '<p>' . __('All files in <code>' . $upload_dir['basedir'] . '</code> folder will be deleted. Including folders and subfolders, and files in subfolders.  Files associated with <a href="' . admin_url('upload.php') . '">media</a> entries will be deleted too.<br><b>There is NO UNDO. WP Reset does not make any backups.</b>', 'wp-reset') . '</p>';
     if (false != $upload_dir['error']) {
       echo '<p><span style="color:#dd3036;"><b>Tool is not available.</b></span> Folder is not writeable by WordPress. Please check file and folder access rights.</p>';
     } else {
-      echo '<p><a data-btn-confirm="Delete everything in uploads folder" data-text-wait="Deleting uploads. Please wait." data-text-confirm="All files and folders in uploads will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n files &amp; folders have been deleted." class="button" href="#" id="delete-uploads">Delete all files &amp; folders in uploads folder</a></p>';
+      echo '<p><a data-btn-confirm="Delete everything in uploads folder" data-text-wait="Deleting uploads. Please wait." data-text-confirm="All files and folders in uploads will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n files &amp; folders have been deleted." class="button button-delete" href="#" id="delete-uploads">Delete all files &amp; folders in uploads folder</a></p>';
     }
     echo '</div>';
 
+    $theme =  wp_get_theme();
+
     echo '<div class="card">';
-    echo '<h2>' . __('Themes', 'wp-reset') . '</h2>';
-    echo '<p>' . __('All themes will be deleted. Including the currently active theme - ' . $theme->get('Name') . '. <b>There is NO UNDO. WP Reset will not make any backups.</b>', 'wp-reset') . '</p>';
-    echo '<p><a data-btn-confirm="Delete all themes" data-text-wait="Deleting all themes. Please wait." data-text-confirm="All themes will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n themes have been deleted." class="button" href="#" id="delete-themes">Delete all themes</a></p>';
+    echo '<h2>' . __('Delete Themes', 'wp-reset') . '</h2>';
+    echo '<p>' . __('All themes will be deleted. Including the currently active theme - ' . $theme->get('Name') . '.<br><b>There is NO UNDO. WP Reset does not make any backups.</b>', 'wp-reset') . '</p>';
+    echo '<p><a data-btn-confirm="Delete all themes" data-text-wait="Deleting all themes. Please wait." data-text-confirm="All themes will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n themes have been deleted." class="button button-delete" href="#" id="delete-themes">Delete all themes</a></p>';
     echo '</div>';
 
     echo '<div class="card">';
-    echo '<h2>' . __('Plugins', 'wp-reset') . '</h2>';
-    echo '<p>' . __('Type <b>reset</b> in the confirmation field to confirm the reset and then click the "Reset WordPress" button. <b>There is NO UNDO. WP Reset will not make any backups.</b>', 'wp-reset') . '</p>';
-    echo '<p>WP Reset plugin will no be deleted or disabled.</p>';
-    echo '<p><a data-btn-confirm="Delete plugins" data-text-wait="Deleting plugins. Please wait." data-text-confirm="All plugins except WP Reset will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n plugins have been deleted." class="button" href="#" id="delete-plugins">Delete plugins</a></p>';
+    echo '<h2>' . __('Delete Plugins', 'wp-reset') . '</h2>';
+    echo '<p>' . __('All plugins will be deleted except for WP Reset which will remain active.<br><b>There is NO UNDO. WP Reset does not make any backups.</b>', 'wp-reset') . '</p>';
+    echo '<p><a data-btn-confirm="Delete plugins" data-text-wait="Deleting plugins. Please wait." data-text-confirm="All plugins except WP Reset will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n plugins have been deleted." class="button button-delete" href="#" id="delete-plugins">Delete plugins</a></p>';
+    echo '</div>';
+
+    $custom_tables = $this->get_custom_tables();
+
+    echo '<div class="card">';
+    echo '<h2>' . __('Empty or Delete Custom Tables', 'wp-reset') . '</h2>';
+    echo '<p>' . __('This action affects only custom tables with <code>' . $wpdb->prefix . '</code> prefix. Core WP tables and other tables in the database that do not have that prefix will not be deleted/emptied. Deleting (dropping) tables completely removes them from the database. Emptying (truncating) removes all content from them, but keeps the structure intact.<br><b>There is NO UNDO. WP Reset does not make any backups.</b></p>', 'wp-reset');
+    if ($custom_tables) {
+      echo '<p>' . __('The following ' . sizeof($custom_tables) . ' custom tables are affected by this tool: ');
+      foreach ($custom_tables as $tbl) {
+        echo '<code>' . $tbl['name'] . '</code>';
+        if (next($custom_tables)) {
+          echo ', ';
+        }
+      } // foreach
+      echo '.</p>';
+      $custom_tables_btns = '';
+    } else {
+      echo '<p>' . __('There are no custom tables. There\'s nothing for this tool to empty or delete.', 'wp-reset') . '</p>';
+      $custom_tables_btns = ' disabled';
+    }
+    echo '<p><a data-btn-confirm="Empty custom tables" data-text-wait="Emptying custom tables. Please wait." data-text-confirm="All custom tables with prefix <code>' . $wpdb->prefix . '</code> will be emptied. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n custom tables have been emptied." class="button button-delete' . $custom_tables_btns . '" href="#" id="truncate-custom-tables">Empty (truncate) custom tables</a>&nbsp; &nbsp;';
+    echo '<a data-btn-confirm="Delete custom tables" data-text-wait="Deleting custom tables. Please wait." data-text-confirm="All custom tables with prefix <code>' . $wpdb->prefix . '</code> will be deleted. There is NO UNDO. WP Reset will not make any backups." data-text-done="%n custom tables have been deleted." class="button button-delete' . $custom_tables_btns . '" href="#" id="drop-custom-tables">Delete (drop) custom tables</a></p>';
+
     echo '</div>';
   } // tab_tools
 
 
   /**
    * Echoes content for support tab
-   * 
+   *
    * @return null
    */
   private function tab_support() {
@@ -990,11 +1057,11 @@ class WP_Reset {
     echo '<p>' . __('No need for donations or anything like that :) If you can give us a <a href="https://wordpress.org/support/plugin/wp-reset/reviews/#new-post" target="_blank">five star rating</a> you\'ll help out more than you can imagine. Thank you!', 'wp-reset') . '</p>';
     echo '</div>';
   } // tab_support
-  
-  
+
+
   /**
    * Echoes content for snapshots tab
-   * 
+   *
    * @return null
    */
   private function tab_snapshots() {
@@ -1007,7 +1074,7 @@ class WP_Reset {
     echo '<p>A snapshot is a copy of all WP database tables, standard and custom ones, saved in your database. Files are not saved or included in snapshots in any way.<br>
     Snapshots are primarily a development tool. Although they can be used for backups (and downloaded), we suggest finding a more suitable tool for live sites, such as <a href="https://wordpress.org/plugins/updraftplus/" target="_blank">UpdraftPlus</a>. Use snapshots to find out what changes a plugin made to your database or to quickly restore the dev environment after testing database related changes.<br>Restoring a snapshot does not affect other snapshots, or WP Reset settings.</p>';
    echo '<p>Snapshots are still in development. If you see a bug or just have an idea how to make the tool better, please let us know <a href="https://twitter.com/WebFactoryLtd" target="_blank">@webfactoryltd</a> or <a href="mailto:wpreset@webfactoryltd.com?subject=WPR%20DB%20Snapshots%20Feedback">email us</a>. Thank you!</p>';
-    
+
     $table_status = $wpdb->get_results('SHOW TABLE STATUS');
     if (is_array($table_status)) {
       foreach ($table_status as $index => $table) {
@@ -1035,7 +1102,7 @@ class WP_Reset {
       }
       echo ' totaling ' . $this->format_size($tbl_size) .' in ' . number_format($tbl_rows) . ' rows.</p>';
     }
-    
+
     echo '';
     echo '</div>';
 
@@ -1077,11 +1144,11 @@ class WP_Reset {
 
     echo '</div>';
   } // tab_snapshots
-  
-  
+
+
   /**
    * Echoes content for sponsor tab
-   * 
+   *
    * @return null
    */
   private function tab_geoip() {
@@ -1095,25 +1162,25 @@ class WP_Reset {
     echo '<p>' . __('IP addresses are boring and don\'t mean much to people. However, they can easily be transformed into a huge source of data by using a GeoIP service. From filtering and segmenting users to providing a better UX - geographical data can enhance any web app! See an <a href="https://wpreset.com/geoip-transform-boring-data-better-user-experience/" target="_blank">example</a> we recently wrote about.', 'wp-reset') . '</p>';
     echo '<p><a href="https://ipgeolocation.io/ip-location" target="_blank" class="button">See what data is available for your IP address</a></p>';
     echo '</div>';
-    
+
     echo '<div class="card">';
     echo '<h2>' . __('Get a free account', 'wp-reset') . '</h2>';
     echo '<p>' . __('IP Geolocation knows how difficult it is to start any new project. That\'s why they offer <a href="https://ipgeolocation.io/signup" target="_blank">50,000 API requests per month for free</a>. No credit card required, no tricks - just register for an account and you can use the service. It\'s a great way to add value to any web project.' , 'wp-reset') . '</p>';
     echo '<p><a href="https://ipgeolocation.io/signup" target="_blank" class="button">Get a FREE account with 50,000 API requests a month</a></p>';
     echo '</div>';
-    
+
     echo '<p>Permanently <a href="#" class="wpr-dismiss-notice" data-notice="geoip_tab">remove this tab</a>.</p>';
   } // tab_geoip
-  
+
 
   /**
    * Helper function for generating UTM tagged links
-   * 
+   *
    * @param string  $placement  Optional. UTM content param.
    * @param string  $page       Optional. Page to link to.
    * @param array   $params     Optional. Extra URL params.
    * @param string  $anchor     Optional. URL anchor part.
-   * 
+   *
    * @return string
    */
   function generate_web_link($placement = '', $page = '/', $params = array(), $anchor = '') {
@@ -1140,21 +1207,50 @@ class WP_Reset {
 
   /**
    * Returns all saved snapshots from DB
-   * 
+   *
    * @return array
    */
   function get_snapshots() {
     $snapshots = get_option('wp-reset-snapshots', array());
-    
+
     return $snapshots;
   } // get_snapshots
 
 
   /**
+   * Returns all custom table names, with prefix
+   *
+   * @return array
+   */
+  function get_custom_tables() {
+    global $wpdb;
+    $custom_tables = array();
+
+    $table_status = $wpdb->get_results('SHOW TABLE STATUS');
+    if (is_array($table_status)) {
+      foreach ($table_status as $index => $table) {
+        if (0 !== stripos($table->Name, $wpdb->prefix)) {
+          continue;
+        }
+        if (empty($table->Engine)) {
+          continue;
+        }
+
+        if (false === in_array($table->Name, $this->core_tables)) {
+          $custom_tables[] = array('name' => $table->Name, 'rows' => $table->Rows, 'data_length' => $table->Data_length, 'index_length' => $table->Index_length);
+        }
+      } // foreach
+    }
+
+    return $custom_tables;
+  } // get_custom tables
+
+
+  /**
    * Format file size to human readable string
-   * 
+   *
    * @param int  $bytes  Size in bytes to format.
-   * 
+   *
    * @return string
    */
   function format_size($bytes) {
@@ -1172,9 +1268,9 @@ class WP_Reset {
 
   /**
    * Creates snapshot of current tables by copying them in the DB and saving metadata.
-   * 
+   *
    * @param int  $name  Optional. Name for the new snapshot.
-   * 
+   *
    * @return array|WP_Error Snapshot details in array on success, or error object on fail.
    */
   function do_create_snapshot($name = '') {
@@ -1189,7 +1285,7 @@ class WP_Reset {
     }
 
     if ($name) {
-      $snapshot['name'] = substr(trim($name), 0, 64);  
+      $snapshot['name'] = substr(trim($name), 0, 64);
     } else {
       $snapshot['name'] = '';
     }
@@ -1237,9 +1333,9 @@ class WP_Reset {
 
   /**
    * Delete snapshot metadata and tables from DB
-   * 
+   *
    * @param string  $uid  Snapshot unique 6-char ID.
-   * 
+   *
    * @return bool|WP_Error True on success, or error object on fail.
    */
   function do_delete_snapshot($uid = '') {
@@ -1268,9 +1364,9 @@ class WP_Reset {
 
   /**
    * Exports snapshot as SQL dump; saved in gzipped file in WP_CONTENT folder.
-   * 
+   *
    * @param string  $uid  Snapshot unique 6-char ID.
-   * 
+   *
    * @return string|WP_Error Export base filename, or error object on fail.
    */
   function do_export_snapshot($uid = '') {
@@ -1297,7 +1393,7 @@ class WP_Reset {
 
       $folder = wp_mkdir_p(trailingslashit(WP_CONTENT_DIR) . $this->snapshots_folder);
       if (!$folder) {
-        return new WP_Error(1, 'Unable to create wp-content/' . $this->snapshots_folder . '/ folder.');  
+        return new WP_Error(1, 'Unable to create wp-content/' . $this->snapshots_folder . '/ folder.');
       }
 
       $world_dumper->dump(trailingslashit(WP_CONTENT_DIR) . $this->snapshots_folder . '/wp-reset-snapshot-' . $uid . '.sql.gz', $uid . '_');
@@ -1311,9 +1407,9 @@ class WP_Reset {
 
   /**
    * Replace current tables with ones in snapshot.
-   * 
+   *
    * @param string  $uid  Snapshot unique 6-char ID.
-   * 
+   *
    * @return bool|WP_Error True on success, or error object on fail.
    */
   function do_restore_snapshot($uid = '') {
@@ -1370,9 +1466,9 @@ class WP_Reset {
 
   /**
    * Verifies snapshot integrity by comparing metadata and data in DB
-   * 
+   *
    * @param string  $uid  Snapshot unique 6-char ID.
-   * 
+   *
    * @return bool|WP_Error True on success, or error object on fail.
    */
   function verify_snapshot_integrity($uid) {
@@ -1420,9 +1516,9 @@ class WP_Reset {
 
   /**
    * Compares a selected snapshot with the current table set in DB
-   * 
+   *
    * @param string  $uid  Snapshot unique 6-char ID.
-   * 
+   *
    * @return string|WP_Error Formatted table with details on success, or error object on fail.
    */
   function do_compare_snapshots($uid) {
@@ -1590,25 +1686,25 @@ class WP_Reset {
           $out2 .= '<table class="table_diff">';
           $out2 .= '<tr><td style="width: 100px;"><b>Option Name</b></td><td><b>Current Value</b></td><td><b>Snapshot Value</b></td></tr>';
           foreach ($diff_rows as $row) {
-            $out2 .= '<tr>';  
+            $out2 .= '<tr>';
             $out2 .= '<td style="width: 100px;">' . $row->option_name . '</td>';
             $out2 .= '<td>' . (empty($row->current_value)? '<i>empty</i>': $row->current_value) . '</td>';
             $out2 .= '<td>' . (empty($row->snapshot_value)? '<i>empty</i>': $row->snapshot_value) . '</td>';
-            $out2 .= '</tr>';  
+            $out2 .= '</tr>';
           } // foreach
           foreach ($only_current as $row) {
-            $out2 .= '<tr>';  
+            $out2 .= '<tr>';
             $out2 .= '<td style="width: 100px;">' . $row->option_name . '</td>';
             $out2 .= '<td>' . (empty($row->current_value)? '<i>empty</i>': $row->current_value) . '</td>';
             $out2 .= '<td><i>not found in snapshot</i></td>';
-            $out2 .= '</tr>';  
+            $out2 .= '</tr>';
           } // foreach
           foreach ($only_current as $row) {
-            $out2 .= '<tr>';  
+            $out2 .= '<tr>';
             $out2 .= '<td style="width: 100px;">' . $row->option_name . '</td>';
             $out2 .= '<td><i>not found in current tables</i></td>';
             $out2 .= '<td>' . (empty($row->snapshot_value)? '<i>empty</i>': $row->snapshot_value) . '</td>';
-            $out2 .= '</tr>';  
+            $out2 .= '</tr>';
           } // foreach
           $out2 .= '</table>';
         } else {
@@ -1628,7 +1724,7 @@ class WP_Reset {
 
   /**
    * Generates a unique 6-char snapshot ID; verified non-existing
-   * 
+   *
    * @return string
    */
   function generate_snapshot_uid() {
@@ -1647,14 +1743,84 @@ class WP_Reset {
     if ($cnt == 30) {
       $uid = false;
     }
-    
+
     return $uid;
   } // generate_snapshot_uid
 
 
   /**
+   * Helper function for adding plugins to featured list
+   *
+   * @return array
+   */
+  function featured_plugins_tab($args) {
+    add_filter('plugins_api_result', array($this, 'plugins_api_result'), 10, 3);
+
+    return $args;
+  } // featured_plugins_tab
+
+
+  /**
+   * Add single plugin to featured list
+   *
+   * @return object
+   */
+  function add_plugin_featured($plugin_slug, $res) {
+    // check if plugin is alredy on the list
+    if (is_array($res->plugins)) {
+      foreach ($res->plugins as $plugin) {
+        if ($plugin->slug == $plugin_slug) {
+          return $res;
+        }
+      } // foreach
+    }
+
+    if ($plugin_info = get_transient('wf-plugin-info-' . $plugin_slug)) {
+      $tmp1 = array_slice($res->plugins, 0, 2, false);
+      $tmp2 = array_slice($res->plugins, 2, sizeof($res->plugins) - 2, false);
+      $res->plugins = array_merge($tmp1, array($plugin_info), $tmp2);
+    } else {
+      $plugin_info = plugins_api('plugin_information', array(
+        'slug'   => $plugin_slug,
+        'is_ssl' => is_ssl(),
+        'fields' => array(
+            'banners'           => true,
+            'reviews'           => true,
+            'downloaded'        => true,
+            'active_installs'   => true,
+            'icons'             => true,
+            'short_description' => true,
+        )
+      ));
+      if (!is_wp_error($plugin_info)) {
+        $tmp1 = array_slice($res->plugins, 0, 2, false);
+        $tmp2 = array_slice($res->plugins, 2, sizeof($res->plugins) - 2, false);
+        $res->plugins = array_merge($tmp1, array($plugin_info), $tmp2);
+        set_transient('wf-plugin-info-' . $plugin_slug, $plugin_info, DAY_IN_SECONDS * 7);
+      }
+    }
+
+    return $res;
+  } // add_plugin_featured
+
+
+  /**
+   * Add plugins to featured plugins list
+   *
+   * @return object
+   */
+  function plugins_api_result($res, $action, $args) {
+    remove_filter('plugins_api_result', array($this, 'plugins_api_result'), 10, 3);
+
+    $res = $this->add_plugin_featured('security-ninja', $res);
+
+    return $res;
+  } // plugins_api_result
+
+
+  /**
    * Clean up on uninstall; no action on deactive at the moment
-   * 
+   *
    * @return null
    */
   static function uninstall() {
@@ -1665,15 +1831,15 @@ class WP_Reset {
 
   /**
    * Disabled; we use singleton pattern so magic functions need to be disabled
-   * 
+   *
    * @return null
    */
   private function __clone() {}
-  
+
 
   /**
    * Disabled; we use singleton pattern so magic functions need to be disabled
-   * 
+   *
    * @return null
    */
   private function __sleep() {}
@@ -1681,7 +1847,7 @@ class WP_Reset {
 
   /**
    * Disabled; we use singleton pattern so magic functions need to be disabled
-   * 
+   *
    * @return null
    */
   private function __wakeup() {}

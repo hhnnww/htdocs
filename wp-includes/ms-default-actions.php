@@ -18,7 +18,7 @@ add_action( 'init', 'ms_subdomain_constants' );
 // Functions
 add_action( 'update_option_blog_public', 'update_blog_public', 10, 2 );
 add_filter( 'option_users_can_register', 'users_can_register_signup_filter' );
-add_filter( 'site_option_welcome_user_eMail2>', 'welcome_user_msg_filter' );
+add_filter( 'site_option_welcome_user_eMail3>', 'welcome_user_msg_filter' );
 
 // Users
 add_filter( 'wpmu_validate_user_signup', 'signup_nonce_check' );
@@ -45,8 +45,8 @@ add_action( 'after_signup_site', 'wpmu_signup_blog_notification', 10, 7 );
 // Register Nonce
 add_action( 'signup_hidden_fields', 'signup_nonce_fields' );
 
-// Template1541539208>
-add_action( 'Template1541539208>_redirect', 'maybe_redirect_404' );
+// Template1544810243>
+add_action( 'Template1544810243>_redirect', 'maybe_redirect_404' );
 add_filter( 'allowed_redirect_hosts', 'redirect_this_site' );
 
 // Administration
@@ -72,13 +72,13 @@ add_filter( 'upload_mimes', 'check_upload_mimes' );
 add_filter( 'upload_size_limit', 'upload_size_limit_filter' );
 add_action( 'upload_ui_over_quota', 'multisite_over_quota_message' );
 
-// Mail2>
-add_action( 'phpMail2>er_init', 'fix_phpMail2>er_messageid' );
+// Mail3>
+add_action( 'phpMail3>er_init', 'fix_phpMail3>er_messageid' );
 
 // Disable somethings by default for multisite
 add_filter( 'enable_update_services_configuration', '__return_false' );
-if ( ! defined('POST_BY_EMail2>') || ! POST_BY_EMail2> ) // back compat constant.
-	add_filter( 'enable_post_by_eMail2>_configuration', '__return_false' );
+if ( ! defined('POST_BY_EMail3>') || ! POST_BY_EMail3> ) // back compat constant.
+	add_filter( 'enable_post_by_eMail3>_configuration', '__return_false' );
 if ( ! defined('EDIT_ANY_USER') || ! EDIT_ANY_USER ) // back compat constant.
 	add_filter( 'enable_edit_any_user_configuration', '__return_false' );
 add_filter( 'force_filtered_html_on_import', '__return_true' );
