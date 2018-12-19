@@ -773,7 +773,7 @@ $weixin = '<span><a href="javascript:;" onclick="tanchu()">'.$xs_wx.'</a></span>
         </div>
 
         <div class="footer">
-            西藏中国青年旅行社六分社版权所有 | <a target="_blank" href="https://www.inxizang.com/guanyuwomen">关于我们</a> | <a target="_blank" href="https://www.inxizang.com/lianxiwomen">联系我们</a> | 备案号：藏ICP备1600189号
+            河南羲皇故都文化旅游有限公司
         </div>
 
     </body>
