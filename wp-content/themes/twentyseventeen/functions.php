@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Twenty Seventeen functions and definitions
  *
@@ -51,12 +52,8 @@ function twentyseventeen_setup() {
 	 */
 	add_theme_support( 'post-thumbnails' );
 
-	add_image_size( 'twentyseventeen-featured-image', 2000, 1200, true );
-
-	add_image_size( 'twentyseventeen-thumbnail-avatar', 100, 100, true );
-
 	// Set the default content width.
-	$GLOBALS['content_width'] = 525;
+	$GLOBALS['content_width'] = 770;
 
 	// This theme uses wp_nav_menu() in two locations.
 	register_nav_menus( array(
@@ -80,15 +77,15 @@ function twentyseventeen_setup() {
 	 *
 	 * See: https://codex.wordpress.org/Post_Formats
 	 */
-	add_theme_support( 'post-formats', array(
-		'aside',
-		'image',
-		'video',
-		'quote',
-		'link',
-		'gallery',
-		'audio',
-	) );
+//	add_theme_support( 'post-formats', array(
+//		'aside',
+//		'image',
+//		'video',
+//		'quote',
+//		'link',
+//		'gallery',
+//		'audio',
+//	) );
 
 	// Add theme support for Custom Logo.
 	add_theme_support( 'custom-logo', array(

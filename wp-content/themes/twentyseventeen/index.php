@@ -16,16 +16,27 @@
  */
 
 get_header(); ?>
+<div class="home-box">
+	<div class="wrap">
+		<div class="home-box-header">
+			<h3>热门线路</h3>
+		</div>
+	</div>
+</div>
 
 <div class="wrap">
 	<?php if ( is_home() && ! is_front_page() ) : ?>
-		<header class="page-header">
-			<h1 class="page-title"><?php single_post_title(); ?></h1>
-		</header>
+	<header class="page-header">
+		<h1 class="page-title">
+			<?php single_post_title(); ?>
+		</h1>
+	</header>
 	<?php else : ?>
+	<!--
 	<header class="page-header">
 		<h2 class="page-title"><?php _e( 'Posts', 'twentyseventeen' ); ?></h2>
 	</header>
+-->
 	<?php endif; ?>
 
 	<div id="primary" class="content-area">
