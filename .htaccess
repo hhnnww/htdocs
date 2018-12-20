@@ -10,8 +10,12 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress
+
+# BEGIN TIMTHUMB
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 RewriteRule ^wp-content/uploads/(.*?)\.(jpg|png|gif|jpeg)$ wp-content/uploads/timthumb.php?src=/wp-content/uploads/$1.$2$3&s=1&q=60 [NC,L,QSA]
 </IfModule>
+
+# END TIMTHUMB
