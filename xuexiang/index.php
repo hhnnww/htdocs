@@ -775,7 +775,7 @@ $weixin = '<span><a href="javascript:;" onclick="tanchu()">'.$xs_wx.'</a></span>
         </div>
 
         <div class="footer">
-            河南羲皇故都文化旅游有限公司
+            河南羲皇故都文化旅游有限公司 <script type="text/javascript" src="//js.users.51.la/19809357.js"></script>
         </div>
 
     </body>
